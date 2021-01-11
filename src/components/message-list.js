@@ -7,6 +7,9 @@ class MessageList extends React.PureComponent {
     super(...args)
     this.state = {
       messages: [],
+      info :[],
+      error:[],
+      warning:[]
     }
   }
 
@@ -65,7 +68,10 @@ getWarningMessage =()=>{
     )
   )
 }
-   
+
+clearMessage =()=>{
+  this.setState({messages: []});
+}
 
   render() {
     const isApiStarted = this.api.isStarted()
@@ -78,6 +84,7 @@ getWarningMessage =()=>{
     //console.log(lastMessage)
     return (
       <div>
+        <div>
         <Button
           variant="contained"
           onClick={this.handleClick}
@@ -85,7 +92,9 @@ getWarningMessage =()=>{
           {isApiStarted ? 'Stop Messages' : 'Start Messages'}
         </Button>
        {/**  <p>{JSON.stringify(messages)}</p>*/}
-        <p></p>
+         <button style={{textAlign:'center'}}   onClick={this.clearMessage}> Clear</button>
+        
+       </div>
         
         <div className='column left'>
           <div style={{textAlign:'center'}}>

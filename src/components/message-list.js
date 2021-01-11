@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
 import Api from '../api'
-
+import './message-list.style.css'
 class MessageList extends React.PureComponent {
   constructor(...args) {
     super(...args)
@@ -43,9 +43,39 @@ class MessageList extends React.PureComponent {
     this.forceUpdate()
   }
 
+   getInfoMessage =()=>{
+    const messages = this.state.messages
+     return messages.filter(message=>(
+      message.priority===3
+      )
+    )
+}
+getErrorMessage =()=>{
+  const messages = this.state.messages
+   return messages.filter(message=>(
+    message.priority===1
+    )
+  )
+}
+
+getWarningMessage =()=>{
+  const messages = this.state.messages
+   return messages.filter(message=>(
+    message.priority===2
+    )
+  )
+}
+   
+
   render() {
     const isApiStarted = this.api.isStarted()
-    const messages = this.state.messages
+   // const messages = this.state.messages
+   // const lastIndex = messages.length-1
+    //const lastMessage = messages[lastIndex]
+    const info = this.getInfoMessage()
+    const error = this.getErrorMessage()
+    const warning = this.getWarningMessage()
+    //console.log(lastMessage)
     return (
       <div>
         <Button
@@ -54,37 +84,61 @@ class MessageList extends React.PureComponent {
         >     
           {isApiStarted ? 'Stop Messages' : 'Start Messages'}
         </Button>
-
-        <div>
-        <p>{JSON.stringify(messages)}</p>
-        {
-            messages.map(message=>{
-              return <div>
-                { 
-                message.priority===1?
-                <div style={{textAlign: 'left'}}>
-                    <p>{message.message}</p>
-                   <p>{message.priority}</p>
-                </div> 
-                 :
-                 message.priority===2?
-                 <div style={{textAlign: 'center'}}>
-                      <p>{message.message}</p>
-                    <p>{message.priority}</p>
-                  </div> :
-                   <div style={{textAlign: 'right'}}>
-                      <p>{message.message}</p>
-                      <p>{message.priority}</p>
-                   </div>
-              }
+       {/**  <p>{JSON.stringify(messages)}</p>*/}
+        <p></p>
+        
+        <div className='column left'>
+          <div style={{textAlign:'center'}}>
+            <p>Error type 1</p>
+            <p>{error.length}</p>
+          </div>
+          
+            {
+              error.map(error=>(
+                <div>
+                  <div style={{backgroundColor:'#F56236', paddingTop:5}}>
+                    {error.message}
+                  </div>
+                 <br></br>
                 </div>
-             
-             
+              ))
             }
-              
-            )
-        }
-           
+        </div>
+        <div className='column middle'>
+        <div style={{textAlign:'center'}}>
+          <p>Warning type 2</p>
+          <p>{warning.length}</p>
+          </div>
+            {
+              warning.map(warning=>(
+                <div>
+                  <div  style={{backgroundColor:'#FCE788', padding:5}}>
+                  <p>{warning.message}</p>
+                </div>
+                <br></br>
+                </div>
+                
+                
+              ))
+            }
+        </div>
+        <div className='column right'>
+        <div style={{textAlign:'center'}}>
+        <p>Info type 3</p>
+        <p>{info.length}</p>
+        </div>
+            {
+              info.map(info=>(
+                <div>
+                  <div  style={{backgroundColor:'#88FCA3', padding:5}}>
+                  <p>{info.message}</p>
+                </div>
+                <br></br>
+                </div>
+                
+                
+              ))
+            }
         </div>
       </div>
     )
